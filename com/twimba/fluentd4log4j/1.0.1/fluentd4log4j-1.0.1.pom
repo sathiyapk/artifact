@@ -1,0 +1,113 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
+	<groupId>com.twimba</groupId>
+	<artifactId>fluentd4log4j</artifactId>
+	<version>1.0.1</version>
+	<packaging>jar</packaging>
+
+	<name>Fluentd Log4j Appender</name>
+	<description>Integration between fluentd and log4j</description>
+
+	<properties>
+		<log4j.version>1.2.17</log4j.version>
+		<fluentd.version>0.2.11</fluentd.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.fluentd</groupId>
+			<artifactId>fluent-logger</artifactId>
+			<version>${fluentd.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+	</dependencies>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<url>http://www.twimba.com/fluentd4log4j</url>
+
+	<scm>
+		<connection>scm:git:git@github.com:tuxetuxe/fluentd4log4j.git</connection>
+		<developerConnection>scm:git:git@github.com:tuxetuxe/fluentd4log4j.git</developerConnection>
+		<url>git@github.com:tuxetuxe/fluentd4log4j.git</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>tuxetuxe</id>
+			<name>Luis Santos</name>
+			<email>luis.santos+fluentd4log4j@twimba.com</email>
+			<organizationUrl>https://github.com/tuxetuxe</organizationUrl>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>Twimba</name>
+	</organization>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+					<altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-fluentd4log4j</altDeploymentRepository>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.12</version>
+				<configuration>
+					<message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+					<noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+					<outputDirectory>${project.build.directory}/mvn-fluentd4log4j</outputDirectory> <!-- matches distribution management repository url above -->
+					<branch>refs/heads/mvn-fluentd4log4j</branch>                       <!-- remote branch name -->
+					<includes><include>**/*</include></includes>
+					<repositoryName>artifact</repositoryName>      <!-- github repo name -->
+					<repositoryOwner>sathiyapk</repositoryOwner>    <!-- github username  -->
+				</configuration>
+				<executions>
+					<!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>deploy</phase>
+						<configuration>
+							<server>github</server>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<outputDirectory>target/scala-${scala.binary.version}/classes</outputDirectory>
+		<testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>internal.repo</id>
+			<name>Temporary Staging Repository</name>
+			<url>file://${project.build.directory}/mvn-fluentd4log4j</url>
+		</repository>
+	</distributionManagement>
+
+</project>
